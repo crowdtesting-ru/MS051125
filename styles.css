@@ -1,0 +1,479 @@
+/* Основа взята из new_styles.css в корне проекта */
+:root {
+    --primary: #3da287;
+    --primary-dark: #329670;
+    --primary-light: #4fb599;
+    --bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --white: #ffffff;
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+    --border: #e1e8ed;
+    --shadow: 0 10px 25px rgba(0,0,0,0.1);
+    --shadow-hover: 0 15px 35px rgba(0,0,0,0.15);
+    --success: #27ae60;
+    --radius: 16px;
+    --radius-small: 8px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dark);
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px;
+    gap: 32px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.container.with-result {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 32px;
+}
+
+.search-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 32px;
+    height: fit-content;
+    border: 1px solid var(--border);
+}
+
+.search-card h1 {
+    margin: 0 0 24px;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-group { margin-bottom: 24px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark); font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+input { width: 100%; padding: 16px 20px; border: 2px solid var(--border); border-radius: var(--radius-small); font-size: 16px; background: var(--white); color: var(--text-dark); }
+input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(61, 162, 135, 0.1); transform: translateY(-1px); }
+input::placeholder { color: var(--text-light); }
+
+button { width: 100%; padding: 16px 24px; border: none; border-radius: var(--radius-small); background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; cursor: pointer; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+button:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); }
+button:disabled { opacity: .6; cursor: not-allowed; }
+
+
+.addresses { 
+  margin-top: 24px; 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 28px; 
+  max-height: 60vh; 
+  overflow-y: auto; 
+  padding-right: 8px;
+  padding-bottom: 8px;
+}
+
+/* Стили для скроллбара */
+.addresses::-webkit-scrollbar {
+  width: 6px;
+}
+
+.addresses::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.addresses::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+.addresses::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+.addr { 
+  background: var(--white); 
+  border: 2px solid var(--border); 
+  border-left: 4px solid var(--primary); 
+  padding: 20px 60px 20px 20px; 
+  border-radius: var(--radius-small); 
+  cursor: pointer; 
+  transition: all .3s; 
+  position: relative;
+}
+
+.addr:hover { transform: translateX(6px); box-shadow: var(--shadow-hover); }
+
+/* Состояния выполнения */
+.addr.pending {
+  background: #f8f9fa;
+  border-left-color: #6c757d;
+  opacity: 0.8;
+}
+
+.addr.completed {
+  background: #d4edda;
+  border-left-color: #28a745;
+  border-color: #c3e6cb;
+}
+
+
+/* Кнопка переключения состояния */
+.completion-toggle {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 2px solid #6c757d;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.completion-toggle:hover {
+  border-color: var(--primary);
+  background: rgba(61, 162, 135, 0.1);
+}
+
+.addr.completed .completion-toggle {
+  background: #28a745;
+  border-color: #28a745;
+}
+
+.addr.completed .completion-toggle::after {
+  content: "✓";
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Курсив для адреса */
+.addr-line { font-style: italic; color: var(--text-dark); }
+
+/* Жирный способ + подчеркивание */
+.method-strong { font-weight: 700; text-decoration: underline; }
+
+/* Бейдж для номера волны */
+.wave-badge {
+  display: inline-block;
+  background: #e8f4f8;
+  color: #2563eb;
+  font-size: 0.75em;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  border: 1px solid #bfdbfe;
+}
+
+.details { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px; border: 1px solid var(--border); }
+.tester { font-weight: 700; font-size: 18px; color: var(--primary); margin-bottom: 16px; padding: 16px; background: linear-gradient(135deg, rgba(61,162,135,.1) 0%, rgba(79,181,153,.05) 100%); border-radius: var(--radius-small); border-left: 4px solid var(--primary); }
+.place { margin: 16px 0 24px; font-size: 16px; font-weight: 600; color: var(--text-dark); padding: 16px; background: #f8f9fa; border-radius: var(--radius-small); border: 1px solid var(--border); }
+.text { border-top: 2px solid var(--border); padding-top: 24px; white-space: pre-line; font-size: 15px; line-height: 1.7; }
+
+.status-indicator { position: fixed; top: 20px; right: 20px; padding: 12px 16px; background: var(--success); color: #fff; border-radius: var(--radius-small); font-size: 14px; font-weight: 600; transform: translateY(-100px); transition: transform .3s; z-index: 1000; }
+.status-indicator.show { transform: translateY(0); }
+.status-indicator.error { background: #e74c3c; }
+
+@media (max-width: 1024px) {
+  .container { max-width: 100%; padding: 24px; }
+  .container.with-result { grid-template-columns: 380px 1fr; gap: 24px; }
+}
+/* Сворачивающиеся блоки */
+.collapsible {
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  margin: 16px 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.collapsible-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(61,162,135,.05) 0%, rgba(79,181,153,.02) 100%);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: var(--text-dark);
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.collapsible-header:hover {
+  background: linear-gradient(135deg, rgba(61,162,135,.1) 0%, rgba(79,181,153,.05) 100%);
+  border-bottom-color: var(--border);
+}
+
+.collapsible-header .arrow {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.collapsible.active .collapsible-header .arrow {
+  transform: rotate(180deg);
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 20px;
+}
+
+.collapsible.active .collapsible-content {
+  max-height: 1000px;
+  padding: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.collapsible-content p {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+.collapsible-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Стили для отчетов/форм */
+.report-section {
+  background: #fff3cd;
+  border: 2px solid #ffeaa7;
+  border-radius: var(--radius-small);
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.report-section h4 {
+  margin: 0 0 12px 0;
+  color: #856404;
+  font-weight: 700;
+}
+
+.report-link {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 12px 20px;
+  border-radius: var(--radius-small);
+  text-decoration: none;
+  font-weight: 600;
+  margin: 12px 0;
+  transition: all 0.3s ease;
+}
+
+.report-link:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.report-completed-btn {
+  display: inline-block;
+  background: var(--success);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: var(--radius-small);
+  text-decoration: none;
+  font-weight: 600;
+  margin: 12px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.report-completed-btn:hover:not(:disabled) {
+  background: #219a52;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.report-completed-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Блоки с заливкой для выделения */
+.highlight-block {
+  background: #fff9c4;
+  border: 1px solid #f9f06b;
+  border-left: 4px solid #f59e0b;
+  border-radius: var(--radius-small);
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.warning-highlight {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-left: 4px solid #f59e0b;
+  border-radius: var(--radius-small);
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.info-highlight {
+  background: #dbeafe;
+  border: 1px solid #60a5fa;
+  border-left: 4px solid #3b82f6;
+  border-radius: var(--radius-small);
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-weight: 500;
+  color: #1e40af;
+}
+
+/* Улучшенная типографика для текста */
+.text {
+  border-top: 2px solid var(--border);
+  padding-top: 24px;
+  white-space: pre-line;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.text h3, .text h4 {
+  color: var(--primary);
+  margin: 24px 0 16px 0;
+  font-weight: 700;
+}
+
+.text h3 {
+  font-size: 20px;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 8px;
+}
+
+.text h4 {
+  font-size: 18px;
+}
+
+.text p {
+  margin-bottom: 16px;
+}
+
+.text ul, .text ol {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.text li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.text strong {
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.text em {
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.text a {
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.text a:hover {
+  color: var(--primary-dark);
+}
+
+/* Специальные стили для чек-листов */
+.checklist {
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  padding: 20px;
+  margin: 20px 0;
+  line-height: 1.8;
+}
+
+.checklist li {
+  margin: 8px 0;
+  padding: 4px 0;
+  font-size: 15px;
+}
+
+/* Стили для ☐ символов */
+.text p:has-text("☐") {
+  line-height: 1.8;
+  margin: 6px 0;
+}
+
+/* Улучшенное форматирование ссылок */
+.text a {
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.text a:hover {
+  color: var(--primary-dark);
+  background: rgba(61, 162, 135, 0.1);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Не принудительно блочным: оставляем inline, чтобы не ломать строки */
+.text strong { font-weight: 700; color: var(--text-dark); }
+
+/* Отступы между секциями */
+.text p {
+  margin-bottom: 12px;
+}
+
+
+
+@media (max-width: 768px) {
+  .container, .container.with-result { display: block; padding: 16px; }
+  .search-card { position: static; width: 100%; margin-bottom: 24px; padding: 24px; }
+  
+  .collapsible-header {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .collapsible.active .collapsible-content {
+    padding: 16px;
+  }
+}
+
+
